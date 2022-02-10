@@ -1,14 +1,19 @@
 import { IResolvers } from "@graphql-tools/utils";
-
-import * as data from '../mockdata.json';
-
+import { CategoryType as Category } from './Category'
+interface ProductType {
+    id: string;
+    name: string;
+    categoryId: string;
+}
 const Product: IResolvers  = {
     category: (parent, args, context) => {
         const { categoryId } = parent;
-        return data.categories.find(category => category.id === categoryId);    
+        const { categories } = context;
+        return categories.find((category: Category) => category.id === categoryId);    
     }
 }
 
 export {
-    Product
+    Product,
+    ProductType
 }
