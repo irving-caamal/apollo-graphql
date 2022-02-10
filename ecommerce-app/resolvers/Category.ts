@@ -9,7 +9,20 @@ const Category: IResolvers = {
     products: (parent, args, context) => {
         const { products } = context;
         const { categoryId } = parent;
-        return products.filter((product: Product) => product.categoryId === categoryId);
+        const { filter } = args;
+        let CategoryProducts = products.filter((product: Product) => product.categoryId === categoryId);
+        if( filter ) {
+            if ( filter.onSale ) {
+                CategoryProducts = CategoryProducts.reduce((acc: Product[], product: Product) => {
+                    if ( product.onSale ) {
+                        acc.push(product);
+                    }
+                    return acc;
+                }, []);
+            }   
+        }
+    
+        return CategoryProducts
     }
 }
 

@@ -10,17 +10,28 @@ const typeDefs = gql`
         onSale: Boolean!
         image: String!
         category: Category!
+        reviews: [Review!]!
     }
     type Category {
         id: ID!
         name: String!
-        products: [Product!]!
+        products(filter: ProductsFilerInput): [Product!]!
+    }
+    type Review {
+        id: ID!
+        date: String!
+        comment: String!
+        rating: Int!  
     }
     type Query {
-        products: [Product!]!
+        products(filter: ProductsFilerInput): [Product!]!
         product(id: ID!): Product
         categories: [Category!]!
         category(id: ID!): Category
+    }
+    input ProductsFilerInput {
+        onSale: Boolean!
+        avgRating: Int
     }
 `;
 

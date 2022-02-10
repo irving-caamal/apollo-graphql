@@ -1,10 +1,11 @@
 import { ApolloServer } from "apollo-server";
 
 import { typeDefs } from "./schema";
-import * as data from './mockdata.json';
 import { Query } from "./resolvers/Query";
 import { Product } from "./resolvers/Product";
 import { Category } from "./resolvers/Category";
+import { Review } from "./resolvers/Review";
+import * as data from './mockdata.json';
 
 const server = new ApolloServer({
     typeDefs,
@@ -12,10 +13,12 @@ const server = new ApolloServer({
         Query,
         Product,
         Category,
+        Review, 
     },
     context: {
         products: data.products,
         categories: data.categories,
+        reviews: data.reviews,
     }
 });
 
