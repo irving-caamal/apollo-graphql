@@ -61,7 +61,6 @@ const persons =[{
     "id": "a393e7b8-6c11-4481-9bd5-a25eac3a4fc2",
     "name": "Mavra Sijmons"
   }]
-
 const typeDefs = gql`
     type Address {
         street: String
