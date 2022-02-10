@@ -11,10 +11,12 @@ const typeDefs = gql`
         price: Float!
         onSale: Boolean!
         image: String!
+        category: Category!
     }
     type Category {
         id: ID!
         name: String!
+        products: [Product!]!
     }
     type Query {
         products: [Product!]!
@@ -35,8 +37,20 @@ const resolvers: IResolvers = {
         category: (parent, args, context) => {
             const { id } = args;
             return data.categories.find(category => category.id === id);
+        }   
+    },
+    Category: {
+        products: (parent, args, context) => {
+            const { categoryId } = parent;
+            return data.products.filter(product => product.categoryId === categoryId);
         }
-    }
+    },
+    Product: {
+        category: (parent, args, context) => {
+            const { categoryId } = parent;
+            return data.categories.find(category => category.id === categoryId);    
+        }
+    },
 };
 
 const server = new ApolloServer({
