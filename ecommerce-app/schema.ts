@@ -29,6 +29,12 @@ const typeDefs = gql`
         categories: [Category!]!
         category(id: ID!): Category
     }
+    type Mutation {
+        addCategory(input: AddCategoryInput): Category!
+    }
+    input AddCategoryInput {
+        name: String!
+    }
     input ProductsFilerInput {
         onSale: Boolean!
         avgRating: Int

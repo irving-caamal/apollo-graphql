@@ -5,6 +5,7 @@ import { Query } from "./resolvers/Query";
 import { Product } from "./resolvers/Product";
 import { Category } from "./resolvers/Category";
 import { Review } from "./resolvers/Review";
+import { Mutation } from "./resolvers/Mutation";
 import * as data from './mockdata.json';
 
 const server = new ApolloServer({
@@ -14,6 +15,7 @@ const server = new ApolloServer({
         Product,
         Category,
         Review, 
+        Mutation,
     },
     context: {
         products: data.products,
