@@ -22,7 +22,7 @@ const Query: IResolvers = {
                             acc += review.rating;
                             numberOfReviews++;   
                         }   
-                        return acc;
+                        return acc; 
                     }, 0);     
                     const avgProductRating =  sumRating / numberOfReviews
                     if(avgProductRating >= avgRating) {
