@@ -38,13 +38,14 @@ const typeDefs = gql`
       ): Person
     }
 `
+const persons = await fetch('http://localhost:3000/persons')
+.then( r => r.json() )
+.then( data => data );
+
 const resolvers = {
   Query: {
     personCount: () => persons.length,
     allPersons: async (root, args) => {
-      const persons = await fetch('http://localhost:3000/persons')
-      .then( r => r.json() )
-      .then( data => data );
       
       if (!args.phone) return persons
       const byPhone = person => args.phone === 'YES' ?
