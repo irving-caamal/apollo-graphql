@@ -1,4 +1,4 @@
-import { gql, ApolloServer } from 'apollo-server';
+import { gql, ApolloServer, UserInputError } from 'apollo-server';
 import {v4 as uuid } from 'uuid';
 const persons =[{
     "phone": "700-310-7274",
@@ -101,6 +101,14 @@ const resolvers = {
   },
   Mutation: {
     addPerson(root, args) {
+      if (persons.find(person => person.name === args.name)) {
+        throw new UserInputError(
+          'Person already exists',
+          {
+            invalidArgs: args.name,
+          }
+        );
+      }
       const person = { ...args, id: uuid() }  
       persons.push(person)
       return person;
