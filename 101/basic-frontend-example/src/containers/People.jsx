@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Person from '../components/Person'
 import { gql, useLazyQuery } from '@apollo/client';
 
 const FIND_PERSON = gql`
