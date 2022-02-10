@@ -91,6 +91,10 @@ const typeDefs = gql`
         street: String!
         city: String!
       ): Person
+      editNumber(
+        name: String!
+        phone: String!
+      ): Person
     }
 `
 const resolvers = {
@@ -120,6 +124,19 @@ const resolvers = {
       }
       const person = { ...args, id: uuid() }  
       persons.push(person)
+      return person;
+    },
+    editNumber(root, args) {
+      const person = persons.find(person => person.name === args.name)
+      if (!person) {
+        throw new UserInputError(
+          'Person does not exist',
+          {
+            invalidArgs: args.name,
+          }
+        );
+      }
+      person.phone = args.phone
       return person;
     }
   },
