@@ -43,6 +43,24 @@ const Mutation: IResolvers = {
         await reviews.push(newReview);
         console.log({reviews})
         return newReview;
+    },
+    deleteCategory: async(parent, args, context) => {
+        const { id } = args;
+        const { categories } = context;
+        const categoryIndex = categories.findIndex((category: CategoryType) => category.id === id);
+        if (categoryIndex === -1) {
+            return false;
+        }
+        let { products } = context;
+        const updatedProducts = products.map((product: ProductType) => {
+            if (product.categoryId === id) {
+                product.categoryId = null;
+            }
+            return product
+        })
+        products = updatedProducts;
+        categories.splice(categoryIndex, 1);
+        return true;
     }
 }
 

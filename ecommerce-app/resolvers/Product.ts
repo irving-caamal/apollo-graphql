@@ -4,7 +4,7 @@ import { ReviewType as Review } from './Review'
 interface ProductType {
     id: string;
     name: string;
-    categoryId: string;
+    categoryId: string | null;
     onSale: boolean;
     reviews: Review[];
 }
