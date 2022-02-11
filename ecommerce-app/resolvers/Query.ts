@@ -5,9 +5,11 @@ import { ReviewType as Review } from "./Review";
 
 const Query: IResolvers = {
     products: (parent, args, context) => {
-        const { products } = context;
-        const { reviews } = context;
+        const { products } = context.db;
+        const { reviews } = context.db;
         const { filter } = args;
+        console.log( { reviews })
+        //47bf3941-9c8b-42c0-9c72-7f3985492a5b
         let filteredProducts = products;
         if (filter) {
             const { onSale, avgRating } = filter;
@@ -34,15 +36,15 @@ const Query: IResolvers = {
         return filteredProducts;
     },
     product: (parent, args, context) => {
-        const { products } = context;
+        const { products } = context.db;
         return products.find((product: Product) => product.id === args.id);
     },
     categories: (parent, args, context) => {
-        const { categories } = context;
+        const { categories } = context.db;
         return categories;
     },
     category: (parent, args, context) => {
-        const { categories } = context;
+        const { categories } = context.db;
         const { id } = args;
         return categories.find((category: Category) => category.id === id);
     }

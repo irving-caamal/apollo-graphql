@@ -2,6 +2,7 @@ import { IResolvers } from '@graphql-tools/utils';
 import { nanoid } from 'nanoid'
 import { CategoryType } from './Category';
 import { ProductType } from './Product';
+import { ReviewType } from './Review';
 
 const Mutation: IResolvers = {
     addCategory: async (parent, args, context) => {
@@ -60,6 +61,26 @@ const Mutation: IResolvers = {
         })
         products = updatedProducts;
         categories.splice(categoryIndex, 1);
+        return true;
+    },
+    deleteProduct: async(parent, args, context) => {
+        const { id } = args;
+        let { products } = context.db;
+        let { reviews } = context.db;
+        const productIndex = products.findIndex((product: ProductType) => {
+            return product.id === id;
+        });
+        if (productIndex === -1) { 
+            return false;
+        }
+        const updatedProducts = products.filter((product: ProductType) => product.id !== id)
+        const updatedReviews = reviews.filter((review: ReviewType) => {
+            return review.productId !== id;
+        })
+        console.log( { updatedReviews  })
+        products.splice(productIndex, 1);
+        
+        context.db.reviews = updatedReviews
         return true;
     }
 }

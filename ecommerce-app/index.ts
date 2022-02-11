@@ -6,7 +6,7 @@ import { Product } from "./resolvers/Product";
 import { Category } from "./resolvers/Category";
 import { Review } from "./resolvers/Review";
 import { Mutation } from "./resolvers/Mutation";
-import * as data from './mockdata.json';
+import * as db from './mockdata.json';
 
 const server = new ApolloServer({
     typeDefs,
@@ -18,9 +18,7 @@ const server = new ApolloServer({
         Mutation,
     },
     context: {
-        products: data.products,
-        categories: data.categories,
-        reviews: data.reviews,
+        db
     }
 });
 

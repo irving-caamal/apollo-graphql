@@ -11,11 +11,12 @@ interface ProductType {
 const Product: IResolvers  = {
     category: (parent, args, context) => {
         const { categoryId } = parent;
-        const { categories } = context;
+        const { categories } = context.db;
         return categories.find((category: Category) => category.id === categoryId);    
     },
     reviews: (parent, args, context) => {
-        const { reviews } = context;
+        const { reviews } = /* It's a way to pass data to resolvers. */
+        context.db;
         const { id } = parent;
         return reviews.filter((review: Review) => review.productId === id);
     }
