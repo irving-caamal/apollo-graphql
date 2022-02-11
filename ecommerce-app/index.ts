@@ -6,7 +6,7 @@ import { Product } from "./resolvers/Product";
 import { Category } from "./resolvers/Category";
 import { Review } from "./resolvers/Review";
 import { Mutation } from "./resolvers/Mutation";
-import * as db from './mockdata.json';
+import * as db from './mockedData.json';
 
 const server = new ApolloServer({
     typeDefs,
