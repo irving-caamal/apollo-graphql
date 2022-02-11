@@ -37,8 +37,12 @@ const typeDefs = gql`
         deleteCategory(id: ID!): Boolean!
         deleteProduct(id: ID!): Boolean!
         deleteReview(id: ID!): Boolean!
+        updateCategory(id: ID!, input: UpdateCategoryInput): Category!
     }
     input AddCategoryInput {
+        name: String!
+    }
+    input UpdateCategoryInput {
         name: String!
     }
     input AddProductInput {

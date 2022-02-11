@@ -93,7 +93,25 @@ const Mutation: IResolvers = {
         reviews.splice(reviewIndex, 1);
         
         return true;
-    }
+    },
+    updateCategory: async (parent, args, context) => {
+        const { id } = args;
+        const { name } = args.input;
+        const { categories } = context.db;
+        const updatedCategory = {
+            name
+        }
+        const categoryIndex = categories.findIndex((category:CategoryType) => category.id === id);
+        if (categoryIndex === -1) {
+            return false;
+        }
+        console.log({updatedCategory})
+        context.db.categories[categoryIndex] = {
+            ...context.db.categories[categoryIndex],
+            ...updatedCategory
+        }
+        return context.db.categories[categoryIndex];
+    },
 }
 
 export {
