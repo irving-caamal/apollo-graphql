@@ -79,8 +79,19 @@ const Mutation: IResolvers = {
         })
         console.log( { updatedReviews  })
         products.splice(productIndex, 1);
-        
+
         context.db.reviews = updatedReviews
+        return true;
+    },
+    deleteReview: async(parent, args, context) => {
+        const { id } = args;
+        let { reviews } = context.db;
+        const reviewIndex = reviews.findIndex((review: ReviewType) => { return review.id === id });
+        if (reviewIndex === -1) {
+            return false;
+        }
+        reviews.splice(reviewIndex, 1);
+        
         return true;
     }
 }
