@@ -1,6 +1,7 @@
 import { IResolvers } from '@graphql-tools/utils';
 import { nanoid } from 'nanoid'
 import { CategoryType } from './Category';
+import { ProductType } from './Product';
 
 const Mutation: IResolvers = {
     addCategory: async (parent, args, context) => {
@@ -24,10 +25,24 @@ const Mutation: IResolvers = {
             price,
             onSale,
             image,
-            category: categories.find((category: CategoryType) => category.id === categoryId)
+            category: categories.find((category: CategoryType) => category.id === categoryId).id
         }
         await products.push(newProduct)
         return newProduct;
+    },
+    addReview: async(parent, args, context) => {
+        const { date, comment, rating, productId } = args.input;
+        const { reviews, products } = context;
+        const newReview = {
+            id: nanoid(),
+            date,
+            comment,
+            rating,
+            productId: products.find((product: ProductType) => product.id === productId).id
+        }
+        await reviews.push(newReview);
+        console.log({reviews})
+        return newReview;
     }
 }
 
