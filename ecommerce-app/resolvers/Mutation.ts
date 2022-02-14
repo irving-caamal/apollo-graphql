@@ -105,13 +105,45 @@ const Mutation: IResolvers = {
         if (categoryIndex === -1) {
             return false;
         }
-        console.log({updatedCategory})
         context.db.categories[categoryIndex] = {
             ...context.db.categories[categoryIndex],
             ...updatedCategory
         }
         return context.db.categories[categoryIndex];
     },
+    updateProduct: async (parent, args, context) => {
+        const { id } = args;
+        const { name, description, quantity, price, onSale, image, categoryId } = args.input;
+        const { products, categories } = context.db;
+        const updatedProduct = {
+            name, description, quantity, price, onSale, image, categoryId
+        }
+        const productIndex = products.findIndex((product: ProductType) => product.id === id);
+        if (productIndex === -1) {
+            return false;
+        }
+        context.db.products[productIndex] = {
+            ...context.db.categories[productIndex],
+            ...updatedProduct
+        }
+        return context.db.products[productIndex];
+    },
+    updateReview: async (parent, args, context) => {
+        const { id } = args;
+        const { date, comment, rating } = args.input;
+        const updatedReview = { date, comment, rating };
+        const { reviews, products } = context.db;
+        const reviewIndex = reviews.findIndex((review: ReviewType) => review.id === id)
+        if (reviewIndex === -1) {
+            return false;
+        }
+        context.db.reviews[reviewIndex] = {
+            ...context.db.reviews[reviewIndex],
+            ...updatedReview
+        }
+        return context.db.reviews[reviewIndex];
+    }
+    
 }
 
 export {
