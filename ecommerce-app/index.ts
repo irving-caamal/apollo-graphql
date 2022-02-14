@@ -5,7 +5,8 @@ import { Query } from "./resolvers/Query";
 import { Product } from "./resolvers/Product";
 import { Category } from "./resolvers/Category";
 import { Review } from "./resolvers/Review";
-import * as data from './mockdata.json';
+import { Mutation } from "./resolvers/Mutation";
+import * as db from './mockedData.json';
 
 const server = new ApolloServer({
     typeDefs,
@@ -14,11 +15,10 @@ const server = new ApolloServer({
         Product,
         Category,
         Review, 
+        Mutation,
     },
     context: {
-        products: data.products,
-        categories: data.categories,
-        reviews: data.reviews,
+        db
     }
 });
 

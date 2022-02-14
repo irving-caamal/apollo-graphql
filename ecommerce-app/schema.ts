@@ -9,7 +9,7 @@ const typeDefs = gql`
         price: Float!
         onSale: Boolean!
         image: String!
-        category: Category!
+        category: Category
         reviews: [Review!]!
     }
     type Category {
@@ -21,13 +21,60 @@ const typeDefs = gql`
         id: ID!
         date: String!
         comment: String!
-        rating: Int!  
+        rating: Int!
+        product: Product!
     }
     type Query {
         products(filter: ProductsFilerInput): [Product!]!
         product(id: ID!): Product
         categories: [Category!]!
         category(id: ID!): Category
+    }
+    type Mutation {
+        addCategory(input: AddCategoryInput): Category!
+        addProduct(input: AddProductInput): Product!
+        addReview(input: AddReviewInput): Review!
+        deleteCategory(id: ID!): Boolean!
+        deleteProduct(id: ID!): Boolean!
+        deleteReview(id: ID!): Boolean!
+        updateCategory(id: ID!, input: UpdateCategoryInput): Category!
+        updateReview(id: ID!, input: UpdateReviewInput): Review!
+        updateProduct(id: ID!, input: UpdateProductInput): Product!
+    }
+    input AddCategoryInput {
+        name: String!
+    }
+    input UpdateCategoryInput {
+        name: String!
+    }
+    input UpdateProductInput {
+        name: String!
+        description: String!
+        quantity: Int!
+        price: Float!
+        onSale: Boolean!
+        image: String!
+        categoryId: ID!
+    }
+    input UpdateReviewInput {
+        date: String!
+        comment: String!
+        rating: Int!
+    }
+    input AddProductInput {
+        name: String!
+        description: String!
+        quantity: Int!
+        price: Float!
+        onSale: Boolean!
+        image: String!
+        categoryId: ID!
+    }
+    input AddReviewInput {
+        date: String!
+        comment: String!
+        rating: Int!
+        productId: ID!
     }
     input ProductsFilerInput {
         onSale: Boolean!

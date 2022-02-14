@@ -7,7 +7,7 @@ export interface CategoryType {
 }
 const Category: IResolvers = {
     products: (parent, args, context) => {
-        const { products } = context;
+        const { products } = context.db;
         const { categoryId } = parent;
         const { filter } = args;
         let CategoryProducts = products.filter((product: Product) => product.categoryId === categoryId);
