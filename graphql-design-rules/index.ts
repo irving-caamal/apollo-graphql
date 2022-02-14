@@ -13,14 +13,16 @@ const typeDefs = gql`
 
   type Group {
     id: ID!
-   features: [GroupFeatures!]!
-   applyFeaturesSeparately: Boolean!
-   cars: [Car!]!
-   name: String!
-   imageId: ID!
-   bodyHtml: String!
+    featureSet: GroupFeatureSet
+    cars: [Car!]!
+    name: String!
+    imageId: ID!
+    bodyHtml: String!
   }
-
+  type GroupFeatureSet {
+    features: [GroupFeatures!]!
+    applyFeaturesSeparately: Boolean!
+  }
   type GroupFeatures {
     feature: String!
   }
