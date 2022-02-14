@@ -19,6 +19,10 @@ const typeDefs = gql`
     imageId: ID!
     bodyHtml: String!
   }
+  type Image {
+    id: ID!
+    url: String!
+  }
   type GroupFeatureSet {
     features: [GroupFeatures!]!
     applyFeaturesSeparately: Boolean!
