@@ -24,10 +24,14 @@ const typeDefs = gql`
         bio: String!
         user: User!
     }
-
     type Mutation {
-        postCreate(title: String!, content: String!, published: Boolean!): PostPayload!
-        postUpdate(id: ID!, title: String!, content: String!, published: Boolean!): PostPayload!
+        postCreate(post: PostInput!): PostPayload!
+        postUpdate(postId: ID!, post: PostInput!): PostPayload!
+    }
+    input PostInput {
+        title: String
+        content: String
+        published: Boolean
     }
     type PostPayload {
         userErrors: [UserError!]!
