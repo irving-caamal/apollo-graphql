@@ -14,7 +14,7 @@ interface PostPayloadType {
     post: Post | null;
 }
 export const Mutation: IResolvers = {
-    postCreate: async (parent, args: PostCreateArgs, { prisma }: Context) : Promise<PostPayloadType> => {
+    postCreate: async (_, args: PostCreateArgs, { prisma }: Context) : Promise<PostPayloadType> => {
         const { title, content, published } = args;
         if (!title || !content) {
             return {
