@@ -26,7 +26,7 @@ const typeDefs = gql`
     }
 
     type Mutation {
-        postCreate(title: String!, content: String!, published: Boolean!): PostPayload!
+        postCreate(title: String!, content: String!, published: Boolean!): Post!
         postUpdate(id: ID!, title: String!, content: String!, published: Boolean!): PostPayload!
     }
     type PostPayload {
