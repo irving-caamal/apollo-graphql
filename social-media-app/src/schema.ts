@@ -31,7 +31,7 @@ const typeDefs = gql`
     }
     type PostPayload {
         userErrors: [UserError!]!
-        post: Post!
+        post: Post
     }
     type UserError {
         message: String!
