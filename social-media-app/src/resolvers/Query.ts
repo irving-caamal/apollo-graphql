@@ -38,6 +38,9 @@ const Query: IResolvers = {
     posts: (_, __, context: Context) => {
         const { prisma } = context;
         return prisma.post.findMany({
+            where: {
+                published: true,
+            },
             orderBy: [
                 {
                     createdAt: "desc",
