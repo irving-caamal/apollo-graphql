@@ -8,6 +8,7 @@ import Post from "../../components/Post/Post";
 const GET_PROFILE = gql`
   query GetProfile($userId: ID!) {
     profile(userId: $userId) {
+        isMyProfile
         profile {
           bio
           user {
@@ -51,7 +52,7 @@ export default function Profile() {
             {profile.profile.bio}
           </p>
         </div>
-        <div>{"profile" ? <AddPostModal /> : null}</div>
+        <div>{profile.isMyProfile ? <AddPostModal /> : null}</div>
       </div>
       <div>
         {profile.profile.user.posts.map(post => (
