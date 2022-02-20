@@ -1,8 +1,9 @@
 import { IResolvers } from '@graphql-tools/utils';
-import { User } from '@prisma/client';
 import validator from 'validator';
 import argon2 from 'argon2';
 import JWT from 'jsonwebtoken';
+
+import { config } from '../../config';
 import { Context } from "../../index"
 interface SignupArgs {
     credentials: {
@@ -100,7 +101,7 @@ export const authResolvers: IResolvers = {
             userId: newUser.id,
             email: newUser.email
         },
-        "mysecret",
+        config.JWT.SECRET,
         {
             expiresIn: 36000,
         });
@@ -153,7 +154,7 @@ export const authResolvers: IResolvers = {
             userId: user.id,
             email: user.email
         },
-        "mysecret",
+        config.JWT.SECRET,
         {
             expiresIn: 36000,
         });

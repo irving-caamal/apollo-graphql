@@ -17,8 +17,18 @@ interface PostPayloadType {
 }
 
 export const postResolvers: IResolvers = {
-    postCreate: async (_, args: PostArgs, { prisma }: Context) : Promise<PostPayloadType> => {
+    postCreate: async (_, args: PostArgs, { prisma, userInfo }: Context) : Promise<PostPayloadType> => {
         const { title, content, published } = args.post;
+        if (!userInfo) {
+            return {
+                userErrors: [
+                    {
+                        message: "You must be logged in to create a post",
+                    }
+                ],
+                post: null
+            }
+        }
         if (!title || !content) {
             return {
                 userErrors: [
@@ -35,7 +45,7 @@ export const postResolvers: IResolvers = {
                     title,
                     content,
                     published,
-                    authorId: 1
+                    authorId: userInfo.userId
                 }
             });
             return {
@@ -54,10 +64,21 @@ export const postResolvers: IResolvers = {
             }
         }
     },
-    postUpdate: async(_, args: { postId: string, post: PostArgs["post"] }, context : Context) : Promise<PostPayloadType> => {
+    postUpdate: async(_, args: { postId: string, post: PostArgs["post"], }, context : Context) : Promise<PostPayloadType> => {
         const { postId, post } = args;
         const { title, content, published } = post;
         const { prisma } = context;
+        const { userInfo } = context;
+        if (!userInfo) {
+            return {
+                userErrors: [
+                    {
+                        message: "You must be logged in to create a post",
+                    }
+                ],
+                post: null
+            }
+        }
         if ( !postId || !Number(postId)) {
             return {
                 userErrors: [
