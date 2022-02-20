@@ -198,4 +198,90 @@ export const postResolvers: IResolvers = {
             post: null
         };
     },
+    postPublish: async(_, args: { postId: string }, context : Context) : Promise<PostPayloadType> => {
+        const { postId } = args;
+        const { prisma, userInfo } = context;
+        if (!userInfo ){
+            return {
+                userErrors: [
+                    {
+                        message: "You must be logged in to publish a post",
+                    }
+                ],
+                post: null
+            }
+        }
+        const errors = await canUserMutatePost({
+            userId: userInfo.userId,
+            postId: Number(postId),
+            prisma
+        });
+        if(errors) {
+            return {
+                userErrors: [
+                    {
+                        message: "You can't publish this post",
+                    }
+                ],
+                post: null
+            }
+        }
+        const existingPost = await prisma.post.update({
+            where: {
+                id: Number(postId),
+            },
+            data: {
+                published: true,
+            }
+        });
+
+        return {
+            userErrors: [],
+            post: existingPost
+        }
+        
+    },
+    postUnpublish: async(_, args: { postId: string }, context : Context) : Promise<PostPayloadType> => {
+        const { postId } = args;
+        const { prisma, userInfo } = context;
+        if (!userInfo ){
+            return {
+                userErrors: [
+                    {
+                        message: "You must be logged in to unpublish a post",
+                    }
+                ],
+                post: null
+            }
+        }
+        const errors = await canUserMutatePost({
+            userId: userInfo.userId,
+            postId: Number(postId),
+            prisma
+        });
+        if(errors) {
+            return {
+                userErrors: [
+                    {
+                        message: "You can't unpublish this post",
+                    }
+                ],
+                post: null
+            }
+        }
+        const existingPost = await prisma.post.update({
+            where: {
+                id: Number(postId),
+            },
+            data: {
+                published: false,
+            }
+        });
+
+        return {
+            userErrors: [],
+            post: existingPost
+        }
+        
+    }
 }
