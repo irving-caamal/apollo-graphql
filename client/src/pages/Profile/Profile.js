@@ -19,6 +19,7 @@ const GET_PROFILE = gql`
             title
             content
             createdAt
+            published
           }
         }
         }
@@ -58,8 +59,13 @@ export default function Profile() {
         {profile.profile.user.posts.map(post => (
           <Post
             key={post.id}
-            id={post.id} title={post.title} content={post.content} date={post.createdAt}
+            id={post.id}
+            title={post.title}
+            content={post.content}
+            date={post.createdAt}
             user={profile.profile.user.name}
+            published={post.published}
+            isMyProfile={profile.isMyProfile}
           />
         ))}
       </div>
