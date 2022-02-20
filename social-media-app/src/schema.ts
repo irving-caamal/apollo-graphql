@@ -28,13 +28,16 @@ const typeDefs = gql`
         postCreate(post: PostInput!): PostPayload!
         postUpdate(postId: ID!, post: PostInput!): PostPayload!
         postDelete(postId: ID!): PostPayload!
-        signUp(email: String!, password: String!, name: String!, bio: String): AuthPayload!
-        signIn(email: String!, password: String!): AuthPayload!
+        signUp(credentials: CredentialsInput, name: String!, bio: String): AuthPayload!
+        signIn(credentials: CredentialsInput): AuthPayload!
     }
     input PostInput {
         title: String
         content: String
         published: Boolean
+    }
+    input CredentialsInput {
+        email: String!, password: String!
     }
     type PostPayload {
         userErrors: [UserError!]!

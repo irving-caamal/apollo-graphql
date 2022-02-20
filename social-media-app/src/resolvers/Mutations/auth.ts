@@ -5,10 +5,12 @@ import argon2 from 'argon2';
 import JWT from 'jsonwebtoken';
 import { Context } from "../../index"
 interface SignupArgs {
-    email: string;
+    credentials: {
+        email: string;
+        password: string;
+    }
     name: string;
     bio?: string;
-    password: string;
 }
 interface UserPayloadType {
     userErrors: {
@@ -18,7 +20,8 @@ interface UserPayloadType {
 }
 export const authResolvers: IResolvers = {
     signUp: async(_, args: SignupArgs, context: Context) : Promise<UserPayloadType> => {
-        const { email, name, bio, password } = args;
+        const { name, bio, } = args;
+        const { email, password } = args.credentials;
         const { prisma } = context;
         if (!email || !password || !name) {
             return {
@@ -103,7 +106,7 @@ export const authResolvers: IResolvers = {
             
     },
     signIn: async (_, args: SignupArgs, context: Context) => {
-        const { email, password } = args;
+        const { email, password } = args.credentials;
         const { prisma } = context;
         if( !email || !password ) {
             return {
