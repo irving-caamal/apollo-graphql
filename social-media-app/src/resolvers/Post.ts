@@ -1,4 +1,5 @@
 import { IResolvers } from "@graphql-tools/utils";
+import { userLoader } from "../loaders/userLoader";
 import { Context } from "..";
 
 interface PostParentType {
@@ -7,11 +8,7 @@ interface PostParentType {
 const Post: IResolvers = {
     user: async (parent: PostParentType, __, { prisma, userInfo }: Context) => {
         const { authorId } = parent;
-        return prisma.user.findUnique({
-            where: {
-                id: authorId
-            }
-        })
+        return userLoader.load
     },
 };
 
