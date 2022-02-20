@@ -2,6 +2,7 @@ import { IResolvers } from '@graphql-tools/utils';
 import { Context } from "../../index"
 import validator from 'validator';
 import { User } from '@prisma/client';
+import argon2 from 'argon2';
 interface SignupArgs {
     email: string;
     name: string;
@@ -75,14 +76,56 @@ export const authResolvers: IResolvers = {
                 user: null,
             }
         }
+        const hashedPassword = await argon2.hash(password);
         return {
             userErrors: [],
             user: await prisma.user.create({
-                data: { email, name, password },
+                data: { email, name, password: hashedPassword },
             })
         }
     },
-    signIn: (_, args: SignupArgs, context: Context) => {
-        //
+    signIn: async (_, args: SignupArgs, context: Context) => {
+        const { email, password } = args;
+        const { prisma } = context;
+        if( !email || !password ) {
+            return {
+                userErrors: [
+                    {
+                        message: "Invalid Email or Password",
+                    }
+                ],
+                user: null
+            }
+        }
+        const user = await prisma.user.findUnique({
+            where: {
+                email,
+            }
+        });
+        if (!user) {
+            return {
+                userErrors: [
+                    {
+                        message: "Invalid Email or Password",
+                    }
+                ],
+                user: null
+            }
+        }
+        const isValidPassword = await argon2.verify(user.password, password);
+        if (!isValidPassword) {
+            return {
+                userErrors: [
+                    {
+                        message: "Invalid Email or Password",
+                    }
+                ],
+                user: null
+            }
+        }
+        return {
+            userErrors: [],
+            user,
+        }
     },
 }
