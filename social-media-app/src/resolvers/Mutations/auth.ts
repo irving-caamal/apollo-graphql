@@ -149,16 +149,14 @@ export const authResolvers: IResolvers = {
                 token: null
             }
         }
-        const token = JWT.sign(
-            {
-                userId: user.id,
-                email: user.email
-            },
-            "mysecret",
-            {
-                expiresIn: 36000,
-            }
-        );
+        const token = JWT.sign({
+            userId: user.id,
+            email: user.email
+        },
+        "mysecret",
+        {
+            expiresIn: 36000,
+        });
         return {
             userErrors: [],
             token,
