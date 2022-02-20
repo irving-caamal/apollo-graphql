@@ -1,8 +1,9 @@
 import { IResolvers } from '@graphql-tools/utils';
-import { Context } from "../../index"
-import validator from 'validator';
 import { User } from '@prisma/client';
+import validator from 'validator';
 import argon2 from 'argon2';
+import JWT from 'jsonwebtoken';
+import { Context } from "../../index"
 interface SignupArgs {
     email: string;
     name: string;
@@ -13,7 +14,7 @@ interface UserPayloadType {
     userErrors: {
         message: string;
     }[];
-    user: User | null;
+    token: string | null;
 }
 export const authResolvers: IResolvers = {
     signUp: async(_, args: SignupArgs, context: Context) : Promise<UserPayloadType> => {
@@ -26,7 +27,7 @@ export const authResolvers: IResolvers = {
                         message: "Email, name and password are required",
                     }
                 ],
-                user: null
+                token: null
             }
         }
         const isEmail = validator.isEmail(email);
@@ -37,7 +38,7 @@ export const authResolvers: IResolvers = {
                         message: "Email is invalid",
                     }
                 ],
-                user: null
+                token: null
             }
         }
         if(!name || !bio) {
@@ -47,7 +48,7 @@ export const authResolvers: IResolvers = {
                         message: "Name and bio are required",
                     }
                 ],
-                user: null
+                token: null
             }
         }
         const isSafePassword = validator.isStrongPassword(password);
@@ -58,7 +59,7 @@ export const authResolvers: IResolvers = {
                         message: "Password is invalid",
                     }
                 ],
-                user: null
+                token: null
             }
         }
         const existingEmail = await prisma.user.findUnique({
@@ -73,16 +74,27 @@ export const authResolvers: IResolvers = {
                         message: 'User with this email already exists',
                     }
                 ],
-                user: null,
+                token: null,
             }
         }
         const hashedPassword = await argon2.hash(password);
+        const newUser = await prisma.user.create({
+            data: { email, name, password: hashedPassword },
+        });
+        const token = JWT.sign({
+            userId: newUser.id,
+            email: newUser.email
+        },
+        "mysecret",
+        {
+            expiresIn: 36000,
+        });
+        console.log({ token })
         return {
             userErrors: [],
-            user: await prisma.user.create({
-                data: { email, name, password: hashedPassword },
-            })
+            token,
         }
+            
     },
     signIn: async (_, args: SignupArgs, context: Context) => {
         const { email, password } = args;
@@ -94,7 +106,7 @@ export const authResolvers: IResolvers = {
                         message: "Invalid Email or Password",
                     }
                 ],
-                user: null
+                token: null
             }
         }
         const user = await prisma.user.findUnique({
@@ -109,7 +121,7 @@ export const authResolvers: IResolvers = {
                         message: "Invalid Email or Password",
                     }
                 ],
-                user: null
+                token: null
             }
         }
         const isValidPassword = await argon2.verify(user.password, password);
@@ -120,7 +132,7 @@ export const authResolvers: IResolvers = {
                         message: "Invalid Email or Password",
                     }
                 ],
-                user: null
+                token: null
             }
         }
         return {

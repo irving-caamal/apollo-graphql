@@ -42,7 +42,7 @@ const typeDefs = gql`
     }
     type AuthPayload {
         userErrors: [UserError!]!
-        user: User
+        token: String
     }
     type UserError {
         message: String!
