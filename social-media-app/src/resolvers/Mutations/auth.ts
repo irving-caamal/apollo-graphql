@@ -12,6 +12,12 @@ interface SignupArgs {
     name: string;
     bio?: string;
 }
+interface SignInArgs {
+    credentials: {
+        email: string;
+        password: string;
+    }
+};
 interface UserPayloadType {
     userErrors: {
         message: string;
@@ -98,14 +104,13 @@ export const authResolvers: IResolvers = {
         {
             expiresIn: 36000,
         });
-        console.log({ token })
         return {
             userErrors: [],
             token,
         }
             
     },
-    signIn: async (_, args: SignupArgs, context: Context) => {
+    signIn: async (_, args: SignInArgs, context: Context): Promise<UserPayloadType> => {
         const { email, password } = args.credentials;
         const { prisma } = context;
         if( !email || !password ) {
@@ -127,7 +132,7 @@ export const authResolvers: IResolvers = {
             return {
                 userErrors: [
                     {
-                        message: "Invalid Email or Password",
+                        message: "Invalid credentials",
                     }
                 ],
                 token: null
@@ -138,15 +143,25 @@ export const authResolvers: IResolvers = {
             return {
                 userErrors: [
                     {
-                        message: "Invalid Email or Password",
+                        message: "Invalid credentials",
                     }
                 ],
                 token: null
             }
         }
+        const token = JWT.sign(
+            {
+                userId: user.id,
+                email: user.email
+            },
+            "mysecret",
+            {
+                expiresIn: 36000,
+            }
+        );
         return {
             userErrors: [],
-            user,
+            token,
         }
     },
 }
