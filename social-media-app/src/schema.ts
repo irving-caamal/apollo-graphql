@@ -2,7 +2,13 @@ import { gql } from 'apollo-server';
 
 const typeDefs = gql`
     type Query {
+        me: UserPayload!
         posts: [Post!]!
+        profile(userId: ID!): ProfilePayload
+    }
+    type ProfilePayload {
+        userErrors: [UserError!]!
+        profile: Profile!
     }
     type Post {
         id: ID!
@@ -16,8 +22,7 @@ const typeDefs = gql`
         id: ID!
         name: String!
         email: String!
-        profile: Profile!
-        post: [Post!]!
+        posts: [Post!]!
     }
     type Profile {
         id: ID!
@@ -48,6 +53,10 @@ const typeDefs = gql`
     type AuthPayload {
         userErrors: [UserError!]!
         token: String
+    }
+    type UserPayload {
+        userErrors: [UserError!]!
+        user: User
     }
     type UserError {
         message: String!
