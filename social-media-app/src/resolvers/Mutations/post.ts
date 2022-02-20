@@ -1,6 +1,6 @@
-import { Context } from "../index"
-import { IResolvers } from '@graphql-tools/utils';
 import { Post } from "@prisma/client";
+import { Context } from "../../index"
+import { IResolvers } from '@graphql-tools/utils';
 
 interface PostArgs {
     post: {
@@ -15,7 +15,8 @@ interface PostPayloadType {
     }[];
     post: Post | null;
 }
-export const Mutation: IResolvers = {
+
+export const postResolvers: IResolvers = {
     postCreate: async (_, args: PostArgs, { prisma }: Context) : Promise<PostPayloadType> => {
         const { title, content, published } = args.post;
         if (!title || !content) {
@@ -148,5 +149,5 @@ export const Mutation: IResolvers = {
             userErrors: [],
             post: null
         };
-    }
+    },
 }
