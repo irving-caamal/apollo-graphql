@@ -28,8 +28,8 @@ const typeDefs = gql`
         postCreate(post: PostInput!): PostPayload!
         postUpdate(postId: ID!, post: PostInput!): PostPayload!
         postDelete(postId: ID!): PostPayload!
-        signUp(email: String!, password: String!, name: String!, bio: String): SignUpPayload!
-        signIn(email: String!, password: String!): SignUpPayload!
+        signUp(email: String!, password: String!, name: String!, bio: String): AuthPayload!
+        signIn(email: String!, password: String!): AuthPayload!
     }
     input PostInput {
         title: String
@@ -40,7 +40,7 @@ const typeDefs = gql`
         userErrors: [UserError!]!
         post: Post
     }
-    type SignUpPayload {
+    type AuthPayload {
         userErrors: [UserError!]!
         user: User
     }
