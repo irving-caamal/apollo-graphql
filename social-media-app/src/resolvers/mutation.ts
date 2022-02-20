@@ -109,5 +109,44 @@ export const Mutation: IResolvers = {
                 },
             })
         }
+    },
+    postDelete: async(_, args: { postId: string }, context : Context) : Promise<PostPayloadType> => {
+        const { postId } = args;
+        const { prisma } = context;
+        if ( !postId || !Number(postId)) {
+            return {
+                userErrors: [
+                    {
+                        message: "Post id is required and should be a valid number",
+                    }
+                ],
+                post: null
+            }
+        }
+        const existingPost = await prisma.post.findUnique({
+            where: {
+                id: Number(postId)
+            }
+        });
+        if(!existingPost) {
+            return {
+                userErrors: [
+                    {
+                        message: "Post not found",
+                    }
+                ],
+                post: null,
+            };
+        }
+        await prisma.post.delete({
+            where: {
+                id: Number(postId),
+            }
+        });
+        
+        return {
+            userErrors: [],
+            post: null
+        };
     }
 }
