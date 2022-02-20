@@ -1,6 +1,7 @@
 import { Post } from "@prisma/client";
 import { Context } from "../../index"
 import { IResolvers } from '@graphql-tools/utils';
+import { canUserMutatePost } from "../../utils/canUserMutatePost";
 
 interface PostArgs {
     post: {
@@ -79,6 +80,14 @@ export const postResolvers: IResolvers = {
                 post: null
             }
         }
+        const error = await canUserMutatePost({
+            userId: userInfo.userId,
+            postId: Number(postId),
+            prisma
+        }); 
+        if (error) {
+            return error;
+        }
         if ( !postId || !Number(postId)) {
             return {
                 userErrors: [
@@ -134,7 +143,17 @@ export const postResolvers: IResolvers = {
     },
     postDelete: async(_, args: { postId: string }, context : Context) : Promise<PostPayloadType> => {
         const { postId } = args;
-        const { prisma } = context;
+        const { prisma, userInfo } = context;
+        if (!userInfo) {
+            return {
+                userErrors: [
+                    {
+                        message: "You must be logged in to create a post",
+                    }
+                ],
+                post: null
+            }
+        }
         if ( !postId || !Number(postId)) {
             return {
                 userErrors: [
@@ -144,6 +163,14 @@ export const postResolvers: IResolvers = {
                 ],
                 post: null
             }
+        }
+        const error = await canUserMutatePost({
+            userId: userInfo.userId,
+            postId: Number(postId),
+            prisma
+        }); 
+        if (error) {
+            return error;
         }
         const existingPost = await prisma.post.findUnique({
             where: {
