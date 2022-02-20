@@ -21,7 +21,18 @@ const Query: IResolvers = {
         });
         return {
             userErrors: [],
-            user,
+            profile: user,
+        }
+    },
+    profile: async(_,{ userId }, { prisma }) => {
+        const user = await prisma.profile.findUnique({
+            where: {
+                userId: Number(userId)
+            }
+        });
+        return {
+            userErrors: [],
+            profile: user,
         }
     },
     posts: (_, __, context: Context) => {
