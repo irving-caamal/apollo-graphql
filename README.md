@@ -22,5 +22,7 @@ Basic backend app that uses apollo graphql, in this course we learned about:
 - JWT
 - Create permissions
 
-
+> Fix M + 1 Problem
+- Batching and Catching queries to prevent multiples and unnecesaries requests.
+- Using dataloader
 
