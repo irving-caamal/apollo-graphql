@@ -44,7 +44,7 @@ export default function Post({
   const formatedDate = new Date(Number(date));
   return (
     <div
-      className="Post"
+      className="Post d-flex flex-column"
       style={published === false ? { backgroundColor: "hotpink" } : {}}
     >
       {isMyProfile && published === false && (
@@ -65,7 +65,7 @@ export default function Post({
           unpublish
         </p>
       )}
-      <div className="Post__header-container">
+      <div className="flex">
         <h2>{title}</h2>
         <h4>
           Created At {`${formatedDate}`.split(" ").splice(0, 3).join(" ")} by{" "}
