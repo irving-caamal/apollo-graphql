@@ -8,7 +8,7 @@ interface PostParentType {
 const Post: IResolvers = {
     user: async (parent: PostParentType, __, { prisma, userInfo }: Context) => {
         const { authorId } = parent;
-        return userLoader.load
+        return userLoader.load(authorId);
     },
 };
 

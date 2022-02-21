@@ -9,6 +9,7 @@ const typeDefs = gql`
     type ProfilePayload {
         userErrors: [UserError!]!
         profile: Profile!
+        isMyProfile: Boolean!
     }
     type Post {
         id: ID!
